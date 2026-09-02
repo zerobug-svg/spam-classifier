@@ -1,5 +1,28 @@
 # Spam Message Classifier
+---
 
+## 🌐 Live Demo
+
+The Spam Classifier API is deployed and publicly accessible.
+
+### 🔗 Live API
+
+https://spam-classifier-latest-1.onrender.com/
+
+### 📚 Swagger API Documentation
+
+https://spam-classifier-latest-1.onrender.com/docs
+
+### ❤️ Health Check
+
+https://spam-classifier-latest-1.onrender.com/health
+
+### 🔮 Example Prediction
+
+**Endpoint:**
+
+```text
+POST https://spam-classifier-latest-1.onrender.com/predict
 An end-to-end Machine Learning project that classifies SMS/email messages as **Spam** or **Ham (Normal)**.
 
 The project includes text preprocessing, TF-IDF feature extraction, Logistic Regression, FastAPI, Pytest testing, Docker containerization, and Git/GitHub version control.
