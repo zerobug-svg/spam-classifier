@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import joblib
 
@@ -155,7 +156,7 @@ print(
 # -----------------------------
 # 10. Save complete pipeline
 # -----------------------------
-
+os.makedirs("models", exist_ok=True)
 joblib.dump(
     model,
     MODEL_PATH
