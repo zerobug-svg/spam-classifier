@@ -48,3 +48,11 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t spam-classifier-api .
+
+      - name: Tag Docker image
+        run: |
+          docker tag spam-classifier-api ghcr.io/${{ github.repository }}:latest
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository }}:latest
