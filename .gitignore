@@ -5,3 +5,6 @@ __pycache__/
 models/*.pkl
 .env
 .vscode/
+
+# MLflow local tracking database
+mlflow.db
