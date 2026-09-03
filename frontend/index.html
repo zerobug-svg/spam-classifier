@@ -1,213 +1,2033 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Spam Message Checker</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Prasanna AI Solutions | AI & ML Solutions
+    </title>
+
+    <meta
+        name="description"
+        content="Prasanna AI Solutions - AI, Machine Learning, Generative AI, NLP, Computer Vision and MLOps solutions."
+    >
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        .container {
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-container {
+            max-width: 1150px;
+            margin: auto;
+
+            padding: 14px 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           COMPANY LOGO
+        ========================= */
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: 900;
+
+            letter-spacing: 1px;
+
+            box-shadow:
+                0 7px 18px rgba(37, 99, 235, 0.25);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .brand-icon::before {
+            content: "";
+
+            position: absolute;
+
+            width: 55px;
+            height: 55px;
+
+            border: 2px solid rgba(255, 255, 255, 0.25);
+
+            border-radius: 50%;
+        }
+
+        .brand-icon span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand-name {
+            color: #1e293b;
+            font-size: 17px;
+        }
+
+        .brand-name span {
+            color: #2563eb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+
+            color: #475569;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            max-width: 1150px;
+            margin: auto;
+
+            padding: 75px 25px 60px;
+
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+
+            padding: 8px 16px;
+
+            border-radius: 30px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            color: #2563eb;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            max-width: 850px;
+
+            margin: auto;
+
+            font-size: 48px;
+
+            line-height: 1.15;
+        }
+
+        .hero h1 span {
+            color: #2563eb;
+        }
+
+        .hero p {
             max-width: 700px;
-            margin: 80px auto;
-            background: white;
-            padding: 35px;
+
+            margin: 20px auto;
+
+            color: #64748b;
+
+            font-size: 17px;
+        }
+
+        .hero-buttons {
+            margin-top: 28px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 13px 23px;
+
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            transition: 0.25s;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
+        .primary-btn {
+            background: #2563eb;
+
+            color: white;
+
+            box-shadow:
+                0 10px 25px rgba(37, 99, 235, 0.20);
         }
 
-        .description {
+        .primary-btn:hover {
+            transform: translateY(-2px);
+
+            background: #1d4ed8;
+        }
+
+        .secondary-btn {
+            background: white;
+
+            color: #334155;
+
+            border: 1px solid #cbd5e1;
+        }
+
+        .secondary-btn:hover {
+            color: #2563eb;
+
+            border-color: #2563eb;
+        }
+
+
+        /* =========================
+           SECTIONS
+        ========================= */
+
+        .section {
+            max-width: 1150px;
+
+            margin: auto;
+
+            padding: 65px 25px;
+        }
+
+        .section-heading {
             text-align: center;
-            color: #666;
-            margin-bottom: 30px;
+
+            margin-bottom: 35px;
+        }
+
+        .section-heading h2 {
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            max-width: 650px;
+
+            margin: auto;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           CLASSIFIER
+        ========================= */
+
+        .classifier-card {
+            max-width: 800px;
+
+            margin: auto;
+
+            padding: 35px;
+
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 20px 50px rgba(15, 23, 42, 0.08);
+        }
+
+        .classifier-title {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+        .classifier-title h3 {
+            font-size: 25px;
+
+            margin-bottom: 5px;
+        }
+
+        .classifier-title p {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+        .input-label {
+            display: block;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            color: #334155;
+
+            margin-bottom: 8px;
         }
 
         textarea {
             width: 100%;
-            height: 150px;
-            padding: 15px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+
+            min-height: 145px;
+
             resize: vertical;
-            box-sizing: border-box;
+
+            padding: 17px;
+
+            border: 2px solid #e2e8f0;
+
+            border-radius: 15px;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 15px;
+
+            transition: 0.2s;
         }
 
-        button {
+        textarea:focus {
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.08);
+        }
+
+        .analyze-btn {
             width: 100%;
-            margin-top: 20px;
-            padding: 14px;
-            font-size: 16px;
+
+            margin-top: 15px;
+
+            padding: 15px;
+
             border: none;
-            border-radius: 8px;
+
+            border-radius: 13px;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+            color: white;
+
+            font-weight: bold;
+
+            font-size: 15px;
+
             cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px rgba(37, 99, 235, 0.25);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
+        }
+
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            display: none;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .spinner {
+            width: 25px;
+            height: 25px;
+
+            border: 3px solid #dbeafe;
+
+            border-top-color: #2563eb;
+
+            border-radius: 50%;
+
+            margin: auto;
+
+            margin-bottom: 8px;
+
+            animation: spin 0.8s linear infinite;
+        }
+
+
+        /* =========================
+           RESULT
+        ========================= */
+
+        .result {
+            display: none;
+
+            margin-top: 25px;
+
+            padding: 23px;
+
+            border-radius: 17px;
+
+            animation: resultAppear 0.4s ease;
+        }
+
+        .result.spam {
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+        }
+
+        .result.ham {
+            background: #f0fdf4;
+
+            border: 1px solid #bbf7d0;
+        }
+
+        .result-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+        }
+
+        .spam .result-title {
+            color: #dc2626;
+        }
+
+        .ham .result-title {
+            color: #16a34a;
+        }
+
+        .probability-label {
+            display: flex;
+
+            justify-content: space-between;
+
+            font-size: 13px;
+
+            color: #475569;
+
+            margin-bottom: 7px;
+        }
+
+        .progress-container {
+            width: 100%;
+
+            height: 11px;
+
+            background: #e2e8f0;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            transition: width 0.8s ease;
+        }
+
+        .spam .progress-bar {
+            background: #dc2626;
+        }
+
+        .ham .progress-bar {
+            background: #16a34a;
+        }
+
+
+        /* =========================
+           SERVICES
+        ========================= */
+
+        .services-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+        }
+
+        .service-card {
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            transition: all 0.25s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+
+            border-color: #bfdbfe;
+
+            box-shadow:
+                0 15px 35px rgba(15, 23, 42, 0.08);
+        }
+
+        .service-icon {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background: #eff6ff;
+
+            font-size: 25px;
+
+            margin-bottom: 16px;
+        }
+
+        .service-card h3 {
+            font-size: 17px;
+
+            margin-bottom: 8px;
+        }
+
+        .service-card p {
+            color: #64748b;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           TECHNOLOGIES
+        ========================= */
+
+        .tech-container {
+            background: white;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 22px;
+
+            padding: 35px;
+
+            text-align: center;
+        }
+
+        .tech-grid {
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+        .tech-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 11px 16px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            color: #334155;
+
+            transition: 0.2s;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-2px);
+
+            border-color: #93c5fd;
+
+            background: #eff6ff;
+        }
+
+        .tech-logo {
+            font-size: 20px;
+        }
+
+
+        /* =========================
+           CONTACT
+        ========================= */
+
+        .contact-section {
+            max-width: 900px;
+
+            margin: 20px auto 70px;
+
+            padding: 50px 25px;
+
+            text-align: center;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eff6ff,
+                    #eef2ff
+                );
+
+            border: 1px solid #dbeafe;
+        }
+
+        .contact-section h2 {
+            font-size: 32px;
+
+            margin-bottom: 10px;
+        }
+
+        .contact-section p {
+            max-width: 600px;
+
+            margin: auto auto 25px;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+        .contact-buttons {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 14px 23px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .email-btn {
             background: #2563eb;
+
             color: white;
         }
 
-        button:hover {
-            background: #1d4ed8;
+        .instagram-btn {
+            background: white;
+
+            color: #c026d3;
+
+            border: 1px solid #e9d5ff;
         }
 
-        #result {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f1f5f9;
-            display: none;
+        .contact-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .spam {
-            color: #dc2626;
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #0f172a;
+
+            color: #94a3b8;
+
+            text-align: center;
+
+            padding: 32px 20px;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        .footer-name {
+            color: #60a5fa;
+
             font-weight: bold;
         }
 
-        .ham {
-            color: #16a34a;
-            font-weight: bold;
+        .footer-tech {
+            margin-top: 8px;
+
+            font-size: 12px;
         }
+
+
+        /* =========================
+           ERROR
+        ========================= */
 
         .error {
-            color: #dc2626;
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+
+            color: #be123c;
+
+            text-align: center;
+
+            font-size: 13px;
         }
+
+
+        /* =========================
+           ANIMATIONS
+        ========================= */
+
+        @keyframes spin {
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+        @keyframes resultAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .services-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 50px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .section {
+                padding: 45px 18px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .classifier-card {
+                padding: 23px;
+            }
+
+            .contact-section {
+                margin-left: 15px;
+
+                margin-right: 15px;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <div class="container">
 
-        <h1>📩 Spam Message Checker</h1>
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-        <p class="description">
-            Enter a message below to check whether it is spam or a normal message.
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <div class="brand">
+
+            <!-- PRASANNA AI SOLUTIONS LOGO -->
+
+            <div class="brand-icon">
+                <span>AI</span>
+            </div>
+
+            <div class="brand-name">
+
+                Prasanna
+                <span>AI Solutions</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="#classifier">
+                Demo
+            </a>
+
+            <a href="#services">
+                Services
+            </a>
+
+            <a href="#technology">
+                Technologies
+            </a>
+
+            <a href="#contact">
+                Contact
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-badge">
+        ✦ AI • ML • MLOps Solutions
+    </div>
+
+
+    <h1>
+
+        Building Intelligent
+
+        <span>
+            AI Solutions
+        </span>
+
+        for Real-World Problems
+
+    </h1>
+
+
+    <p>
+
+        Prasanna AI Solutions designs, develops and deploys
+        practical Artificial Intelligence and Machine Learning
+        solutions using modern technologies.
+
+    </p>
+
+
+    <div class="hero-buttons">
+
+        <a
+            href="#services"
+            class="primary-btn"
+        >
+            Explore Services
+        </a>
+
+
+        <a
+            href="#contact"
+            class="secondary-btn"
+        >
+            Need AI Help?
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CLASSIFIER
+===================================================== -->
+
+<section
+    class="section"
+    id="classifier"
+>
+
+    <div class="section-heading">
+
+        <h2>
+            AI Spam Detection
+        </h2>
+
+        <p>
+            Try our machine learning powered message
+            classification system.
         </p>
-
-        <textarea
-            id="message"
-            placeholder="Enter your message here..."
-        ></textarea>
-
-        <button onclick="checkMessage()">
-            Check Message
-        </button>
-
-        <div id="result"></div>
 
     </div>
 
 
-    <script>
+    <div class="classifier-card">
 
-        async function checkMessage() {
+        <div class="classifier-title">
 
-            const message = document
-                .getElementById("message")
-                .value
-                .trim();
+            <h3>
+                Spam Message Classifier
+            </h3>
 
-            const result = document
-                .getElementById("result");
+            <p>
+                Enter a message and let the AI model analyze it.
+            </p>
 
-
-            if (!message) {
-
-                result.style.display = "block";
-
-                result.innerHTML =
-                    '<p class="error">Please enter a message.</p>';
-
-                return;
-            }
+        </div>
 
 
-            result.style.display = "block";
+        <label class="input-label">
 
-            result.innerHTML = "Checking message...";
+            Enter your message
 
-
-            try {
-
-                const response = await fetch(
-                    "https://spam-classifier-latest-1.onrender.com/predict",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            message: message
-                        })
-                    }
-                );
+        </label>
 
 
-                if (!response.ok) {
-                    throw new Error("API request failed");
+        <textarea
+            id="message"
+            placeholder="Example: Congratulations! You won a free iPhone. Claim now!"
+        ></textarea>
+
+
+        <button
+            class="analyze-btn"
+            id="predictButton"
+            onclick="predictMessage()"
+        >
+
+            🔍 Analyze Message
+
+        </button>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="loading"
+        >
+
+            <div class="spinner"></div>
+
+            AI model is analyzing your message...
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="error"
+            id="error"
+        ></div>
+
+
+        <!-- RESULT -->
+
+        <div
+            class="result"
+            id="result"
+        >
+
+            <div class="result-title">
+
+                <span id="resultIcon"></span>
+
+                <span id="resultText"></span>
+
+            </div>
+
+
+            <div class="probability-label">
+
+                <span>
+                    Spam Probability
+                </span>
+
+                <strong id="probabilityText">
+                    0%
+                </strong>
+
+            </div>
+
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar"
+                    id="progressBar"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SERVICES
+===================================================== -->
+
+<section
+    class="section"
+    id="services"
+>
+
+    <div class="section-heading">
+
+        <h2>
+            Our AI & Technology Services
+        </h2>
+
+        <p>
+            Intelligent solutions for automation,
+            data analysis and business applications.
+        </p>
+
+    </div>
+
+
+    <div class="services-grid">
+
+
+        <!-- SERVICE 1 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🤖
+            </div>
+
+            <h3>
+                AI & Machine Learning
+            </h3>
+
+            <p>
+                Predictive models, classification,
+                recommendation systems and intelligent
+                automation.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 2 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🧠
+            </div>
+
+            <h3>
+                Generative AI
+            </h3>
+
+            <p>
+                AI assistants, chatbots, LLM applications
+                and Retrieval-Augmented Generation solutions.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 3 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                💬
+            </div>
+
+            <h3>
+                NLP Solutions
+            </h3>
+
+            <p>
+                Text classification, sentiment analysis,
+                spam detection and document intelligence.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 4 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                👁️
+            </div>
+
+            <h3>
+                Computer Vision
+            </h3>
+
+            <p>
+                Image classification, object detection,
+                OCR and visual AI applications.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 5 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                ⚙️
+            </div>
+
+            <h3>
+                ML Model Development
+            </h3>
+
+            <p>
+                End-to-end model development including
+                training, evaluation and optimization.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 6 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🔗
+            </div>
+
+            <h3>
+                AI API Development
+            </h3>
+
+            <p>
+                Production-ready REST APIs for connecting
+                AI models with web and business applications.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 7 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                🚀
+            </div>
+
+            <h3>
+                MLOps & Cloud Deployment
+            </h3>
+
+            <p>
+                Docker, CI/CD pipelines, cloud deployment,
+                monitoring and production delivery.
+            </p>
+
+        </div>
+
+
+        <!-- SERVICE 8 -->
+
+        <div class="service-card">
+
+            <div class="service-icon">
+                📊
+            </div>
+
+            <h3>
+                Data Analytics
+            </h3>
+
+            <p>
+                Data processing, exploratory analysis,
+                visualization and actionable insights.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     TECHNOLOGY STACK
+===================================================== -->
+
+<section
+    class="section"
+    id="technology"
+>
+
+    <div class="section-heading">
+
+        <h2>
+            Technology Stack
+        </h2>
+
+        <p>
+            Modern technologies for developing,
+            deploying and maintaining AI applications.
+        </p>
+
+    </div>
+
+
+    <div class="tech-container">
+
+        <div class="tech-grid">
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🐍
+                </span>
+
+                Python
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🤖
+                </span>
+
+                Scikit-learn
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    ⚡
+                </span>
+
+                FastAPI
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🐳
+                </span>
+
+                Docker
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🐙
+                </span>
+
+                GitHub
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🔄
+                </span>
+
+                GitHub Actions
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    ☁️
+                </span>
+
+                AWS
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    ☁️
+                </span>
+
+                Microsoft Azure
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🌐
+                </span>
+
+                Google Cloud
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    📈
+                </span>
+
+                MLflow
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🔥
+                </span>
+
+                PyTorch
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🧠
+                </span>
+
+                TensorFlow
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🐘
+                </span>
+
+                PostgreSQL
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    🍃
+                </span>
+
+                MongoDB
+
+            </div>
+
+
+            <div class="tech-item">
+
+                <span class="tech-logo">
+                    ☁️
+                </span>
+
+                Render
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    class="contact-section"
+    id="contact"
+>
+
+    <h2>
+        Need an AI / ML Solution?
+    </h2>
+
+
+    <p>
+
+        Have a project idea, need help with machine learning,
+        want to automate a business process, or need help
+        deploying an AI application?
+
+        Let's discuss your requirement.
+
+    </p>
+
+
+    <div class="contact-buttons">
+
+
+        <!-- EMAIL -->
+
+        <a
+            href="mailto:adhavprasamna@gmail.com?subject=AI%20%2F%20ML%20Project%20Enquiry"
+            class="contact-btn email-btn"
+        >
+
+            ✉️ Email Us
+
+        </a>
+
+
+        <!-- INSTAGRAM -->
+
+        <a
+            href="https://www.instagram.com/prasanna_045_ig/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-btn instagram-btn"
+        >
+
+            📸 Instagram
+
+        </a>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div>
+
+        © 2026
+
+        <strong>
+            Prasanna AI Solutions
+        </strong>
+
+        • AI & ML Solutions
+
+    </div>
+
+
+    <div class="footer-tech">
+
+        Machine Learning • NLP • Generative AI • MLOps • Cloud
+
+    </div>
+
+
+    <div style="margin-top: 10px;">
+
+        Built by
+
+        <span class="footer-name">
+
+            Prasanna Dattu Adhav
+
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/*
+=========================================================
+BACKEND API
+=========================================================
+*/
+
+const API_URL =
+    "https://spam-classifier-latest-1.onrender.com/predict";
+
+
+
+/*
+=========================================================
+PREDICT MESSAGE
+=========================================================
+*/
+
+async function predictMessage() {
+
+
+    const messageInput =
+        document.getElementById("message");
+
+
+    const button =
+        document.getElementById("predictButton");
+
+
+    const loading =
+        document.getElementById("loading");
+
+
+    const result =
+        document.getElementById("result");
+
+
+    const error =
+        document.getElementById("error");
+
+
+    const resultText =
+        document.getElementById("resultText");
+
+
+    const resultIcon =
+        document.getElementById("resultIcon");
+
+
+    const probabilityText =
+        document.getElementById("probabilityText");
+
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+
+
+    /*
+    -----------------------------------------------------
+    GET MESSAGE
+    -----------------------------------------------------
+    */
+
+    const message =
+        messageInput.value.trim();
+
+
+
+    /*
+    -----------------------------------------------------
+    VALIDATION
+    -----------------------------------------------------
+    */
+
+    if (!message) {
+
+        error.style.display =
+            "block";
+
+        error.innerText =
+            "Please enter a message first.";
+
+        result.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+
+    /*
+    -----------------------------------------------------
+    RESET
+    -----------------------------------------------------
+    */
+
+    error.style.display =
+        "none";
+
+    result.style.display =
+        "none";
+
+    loading.style.display =
+        "block";
+
+    button.disabled =
+        true;
+
+    button.innerText =
+        "Analyzing...";
+
+
+
+    /*
+    -----------------------------------------------------
+    API REQUEST
+    -----------------------------------------------------
+    */
+
+    try {
+
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        message: message
+                    })
+
                 }
+            );
 
 
-                const data = await response.json();
 
+        /*
+        -------------------------------------------------
+        CHECK RESPONSE
+        -------------------------------------------------
+        */
 
-                const prediction =
-                    data.prediction;
+        if (!response.ok) {
 
-                const probability =
-                    (data.spam_probability * 100).toFixed(2);
+            throw new Error(
+                "API request failed."
+            );
 
-
-                if (prediction === "spam") {
-
-                    result.innerHTML = `
-                        <h2 class="spam">🚨 SPAM</h2>
-
-                        <p>
-                            Spam probability:
-                            <strong>${probability}%</strong>
-                        </p>
-                    `;
-
-                } else {
-
-                    result.innerHTML = `
-                        <h2 class="ham">✅ HAM</h2>
-
-                        <p>
-                            Spam probability:
-                            <strong>${probability}%</strong>
-                        </p>
-                    `;
-                }
-
-
-            } catch (error) {
-
-                result.innerHTML = `
-                    <p class="error">
-                        Unable to connect to the spam classifier API.
-                    </p>
-                `;
-
-                console.error(error);
-            }
         }
 
-    </script>
+
+
+        /*
+        -------------------------------------------------
+        READ JSON
+        -------------------------------------------------
+        */
+
+        const data =
+            await response.json();
+
+
+
+        /*
+        -------------------------------------------------
+        GET VALUES
+        -------------------------------------------------
+        */
+
+        const prediction =
+            data.prediction;
+
+
+        const probability =
+            Number(
+                data.spam_probability
+            );
+
+
+
+        /*
+        -------------------------------------------------
+        PERCENTAGE
+        -------------------------------------------------
+        */
+
+        const percentage =
+            probability * 100;
+
+
+
+        /*
+        -------------------------------------------------
+        SHOW RESULT
+        -------------------------------------------------
+        */
+
+        result.style.display =
+            "block";
+
+
+
+        /*
+        -------------------------------------------------
+        SPAM
+        -------------------------------------------------
+        */
+
+        if (
+            prediction.toLowerCase() ===
+            "spam"
+        ) {
+
+            result.className =
+                "result spam";
+
+            resultIcon.innerText =
+                "🚨";
+
+            resultText.innerText =
+                "SPAM DETECTED";
+
+        }
+
+
+
+        /*
+        -------------------------------------------------
+        HAM
+        -------------------------------------------------
+        */
+
+        else {
+
+            result.className =
+                "result ham";
+
+            resultIcon.innerText =
+                "✅";
+
+            resultText.innerText =
+                "SAFE MESSAGE";
+
+        }
+
+
+
+        /*
+        -------------------------------------------------
+        PROBABILITY
+        -------------------------------------------------
+        */
+
+        probabilityText.innerText =
+            percentage.toFixed(2) +
+            "%";
+
+
+
+        /*
+        -------------------------------------------------
+        RESET PROGRESS BAR
+        -------------------------------------------------
+        */
+
+        progressBar.style.width =
+            "0%";
+
+
+
+        /*
+        -------------------------------------------------
+        ANIMATE PROGRESS BAR
+        -------------------------------------------------
+        */
+
+        setTimeout(
+            () => {
+
+                progressBar.style.width =
+                    percentage + "%";
+
+            },
+            100
+        );
+
+
+    }
+
+
+    /*
+    -----------------------------------------------------
+    ERROR
+    -----------------------------------------------------
+    */
+
+    catch (err) {
+
+        console.error(err);
+
+        result.style.display =
+            "none";
+
+        error.style.display =
+            "block";
+
+        error.innerText =
+            "Unable to connect to the spam classifier API. Please try again.";
+
+    }
+
+
+    /*
+    -----------------------------------------------------
+    FINISH
+    -----------------------------------------------------
+    */
+
+    finally {
+
+        loading.style.display =
+            "none";
+
+        button.disabled =
+            false;
+
+        button.innerText =
+            "🔍 Analyze Message";
+
+    }
+
+}
+
+
+
+/*
+=========================================================
+CTRL + ENTER SUPPORT
+=========================================================
+*/
+
+document
+    .getElementById("message")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.ctrlKey &&
+                event.key === "Enter"
+            ) {
+
+                predictMessage();
+
+            }
+
+        }
+    );
+
+</script>
+
 
 </body>
+
 </html>
