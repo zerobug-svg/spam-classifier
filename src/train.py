@@ -29,13 +29,18 @@ DATA_PATH = "data/spam.csv"
 MODEL_PATH = "models/spam_model.pkl"
 MODEL_VERSION = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+REGISTERED_MODEL_NAME = "SpamMessageClassifier"
+
 
 # ==========================================
 # MLflow EXPERIMENT
 # ==========================================
 
 mlflow.set_tracking_uri("sqlite:///mlflow.db")
-mlflow.set_experiment("Spam Message Classifier")
+
+mlflow.set_experiment(
+    "Spam Message Classifier"
+)
 
 
 # ==========================================
@@ -51,7 +56,9 @@ print("Dataset loaded:", df.shape)
 # TEXT PREPROCESSING
 # ==========================================
 
-df["clean_message"] = df["message"].apply(clean_text)
+df["clean_message"] = df["message"].apply(
+    clean_text
+)
 
 X = df["clean_message"]
 y = df["label"]
@@ -69,8 +76,15 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
-print("Training samples:", len(X_train))
-print("Testing samples:", len(X_test))
+print(
+    "Training samples:",
+    len(X_train)
+)
+
+print(
+    "Testing samples:",
+    len(X_test)
+)
 
 
 # ==========================================
@@ -85,7 +99,10 @@ mlflow.start_run()
 # ==========================================
 
 model = Pipeline([
-    ("tfidf", TfidfVectorizer()),
+    (
+        "tfidf",
+        TfidfVectorizer()
+    ),
     (
         "classifier",
         LogisticRegression(
@@ -101,7 +118,10 @@ model = Pipeline([
 
 print("\nTraining model...")
 
-model.fit(X_train, y_train)
+model.fit(
+    X_train,
+    y_train
+)
 
 print("Training complete!")
 
@@ -110,14 +130,19 @@ print("Training complete!")
 # MODEL PREDICTION
 # ==========================================
 
-y_pred = model.predict(X_test)
+y_pred = model.predict(
+    X_test
+)
 
 
 # ==========================================
 # MODEL EVALUATION
 # ==========================================
 
-accuracy = accuracy_score(y_test, y_pred)
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
 
 precision = precision_score(
     y_test,
@@ -149,10 +174,21 @@ print("\n==============================")
 print("MODEL EVALUATION")
 print("==============================")
 
-print(f"Accuracy : {accuracy:.2f}")
-print(f"Precision: {precision:.2f}")
-print(f"Recall   : {recall:.2f}")
-print(f"F1 Score : {f1:.2f}")
+print(
+    f"Accuracy : {accuracy:.2f}"
+)
+
+print(
+    f"Precision: {precision:.2f}"
+)
+
+print(
+    f"Recall   : {recall:.2f}"
+)
+
+print(
+    f"F1 Score : {f1:.2f}"
+)
 
 
 print("\nClassification Report:")
@@ -195,6 +231,11 @@ mlflow.log_param(
     42
 )
 
+mlflow.log_param(
+    "registered_model_name",
+    REGISTERED_MODEL_NAME
+)
+
 
 # ==========================================
 # LOG METRICS TO MLFLOW
@@ -228,12 +269,12 @@ mlflow.log_metric(
 mlflow.sklearn.log_model(
     sk_model=model,
     name="spam_classifier_model",
-    registered_model_name="SpamMessageClassifier"
+    registered_model_name=REGISTERED_MODEL_NAME
 )
 
 
 # ==========================================
-# SAVE MODEL
+# SAVE MODEL LOCALLY
 # ==========================================
 
 os.makedirs(
@@ -254,6 +295,10 @@ print(
 
 print(
     f"Model Version: {MODEL_VERSION}"
+)
+
+print(
+    f"Registered Model: {REGISTERED_MODEL_NAME}"
 )
 
 
