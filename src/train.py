@@ -67,16 +67,9 @@ print("Testing samples:", len(X_test))
 # -----------------------------
 
 model = Pipeline([
-    (
-        "tfidf",
-        TfidfVectorizer()
-    ),
-    (
-        "classifier",
-        LogisticRegression()
-    )
+    ("tfidf", TfidfVectorizer()),
+    ("classifier", LogisticRegression(class_weight="balanced"))
 ])
-
 
 # -----------------------------
 # 6. Train
