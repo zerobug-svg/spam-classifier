@@ -8,3 +8,5 @@ models/*.pkl
 
 # MLflow local tracking database
 mlflow.db
+# MLflow local artifacts
+mlruns/

@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 import joblib
 import mlflow
+import mlflow.sklearn
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -219,6 +220,14 @@ mlflow.log_metric(
     f1
 )
 
+# ==========================================
+# LOG MODEL TO MLFLOW
+# ==========================================
+
+mlflow.sklearn.log_model(
+    sk_model=model,
+    name="spam_classifier_model"
+)
 
 # ==========================================
 # SAVE MODEL
