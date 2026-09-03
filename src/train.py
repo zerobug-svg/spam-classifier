@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 import pandas as pd
 import joblib
 import mlflow
@@ -24,6 +26,7 @@ from src.preprocess import clean_text
 
 DATA_PATH = "data/spam.csv"
 MODEL_PATH = "models/spam_model.pkl"
+MODEL_VERSION = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
 # ==========================================
@@ -167,6 +170,11 @@ print(
 # ==========================================
 
 mlflow.log_param(
+    "model_version",
+    MODEL_VERSION
+)
+
+mlflow.log_param(
     "model",
     "LogisticRegression"
 )
@@ -230,6 +238,10 @@ print("\nModel saved successfully!")
 
 print(
     f"Location: {MODEL_PATH}"
+)
+
+print(
+    f"Model Version: {MODEL_VERSION}"
 )
 
 
