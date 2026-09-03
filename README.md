@@ -76,7 +76,9 @@ Web Frontend
 ---
 
 ## 🏗️ System Architecture
+## 🏗️ System Architecture
 
+![Spam Message Classifier Architecture](images/architecture.png)
 ```text
 User
   ↓
