@@ -184,7 +184,36 @@ Spam / Ham
 ## 📊 Model Evaluation
 
 The model is evaluated using:
+---
 
+## 📊 MLflow Experiment Tracking
+
+This project uses **MLflow** to track Machine Learning experiments, parameters, and evaluation metrics.
+
+### Tracked Parameters
+
+- Model: Logistic Regression
+- Class Weight: Balanced
+- Test Size: 20%
+- Random State: 42
+
+### Latest Experiment Results
+
+| Metric | Score |
+|---|---:|
+| Accuracy | 97.31% |
+| Precision | 88.89% |
+| Recall | 91.28% |
+| F1 Score | 90.07% |
+
+### MLflow Dashboard
+
+MLflow is used locally to visualize experiment runs and compare model performance.
+
+The experiment:
+
+```text
+Spam Message Classifier
 - Accuracy
 - Precision
 - Recall
