@@ -220,14 +220,17 @@ mlflow.log_metric(
     f1
 )
 
+
 # ==========================================
-# LOG MODEL TO MLFLOW
+# LOG MODEL TO MLFLOW MODEL REGISTRY
 # ==========================================
 
 mlflow.sklearn.log_model(
     sk_model=model,
-    name="spam_classifier_model"
+    name="spam_classifier_model",
+    registered_model_name="SpamMessageClassifier"
 )
+
 
 # ==========================================
 # SAVE MODEL
