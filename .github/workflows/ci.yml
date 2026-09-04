@@ -40,7 +40,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+          python -m pytest
 
       - name: Evaluate model promotion
         id: promotion
@@ -68,11 +68,13 @@ jobs:
         if: steps.promotion.outputs.promotion_status == 'promoted'
         run: |
           docker tag spam-classifier-api ghcr.io/${{ github.repository }}:latest
+          docker tag spam-classifier-api ghcr.io/${{ github.repository }}:${{ github.sha }}
 
       - name: Push Docker image
         if: steps.promotion.outputs.promotion_status == 'promoted'
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
 
       - name: Skip Docker publishing
         if: steps.promotion.outputs.promotion_status == 'rejected'
