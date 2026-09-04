@@ -5,3 +5,7 @@ __pycache__
 .github
 .vscode
 *.pyc
+
+# MLflow local tracking data
+mlflow.db
+mlruns/
