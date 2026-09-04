@@ -25,6 +25,23 @@ print(
 )
 
 
+# Get the model version currently assigned to @production
+client = mlflow.MlflowClient()
+
+production_model = client.get_model_version_by_alias(
+    REGISTERED_MODEL_NAME,
+    PRODUCTION_ALIAS
+)
+
+MODEL_VERSION = production_model.version
+
+
+print(
+    "Production model version:",
+    MODEL_VERSION
+)
+
+
 # Load the production model from DagsHub Model Registry
 MODEL_URI = (
     f"models:/{REGISTERED_MODEL_NAME}@{PRODUCTION_ALIAS}"
@@ -72,4 +89,8 @@ def predict_message(message: str):
         spam_index
     ]
 
-    return prediction, spam_probability
+    return (
+        prediction,
+        spam_probability,
+        MODEL_VERSION
+    )

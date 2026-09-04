@@ -8,7 +8,9 @@ client = TestClient(app)
 
 def test_health_check():
 
-    response = client.get("/health")
+    response = client.get(
+        "/health"
+    )
 
     assert response.status_code == 200
 
@@ -31,7 +33,12 @@ def test_spam_prediction():
     result = response.json()
 
     assert "prediction" in result
+
     assert "spam_probability" in result
+
+    assert "model_version" in result
+
+    assert result["model_version"] == "9"
 
 
 def test_normal_message():
@@ -48,4 +55,9 @@ def test_normal_message():
     result = response.json()
 
     assert "prediction" in result
+
     assert "spam_probability" in result
+
+    assert "model_version" in result
+
+    assert result["model_version"] == "9"

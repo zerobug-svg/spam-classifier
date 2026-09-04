@@ -6,13 +6,12 @@ from src.predict import predict_message
 
 
 app = FastAPI(
-    title="Spam Message Classifier",
+    title="Spam Message Classifier API",
     description="API for detecting spam messages",
     version="1.0.0"
 )
 
 
-# Allow the frontend to communicate with the API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -43,7 +42,7 @@ def health_check():
 @app.post("/predict")
 def predict(request: MessageRequest):
 
-    prediction, probability = predict_message(
+    prediction, probability, model_version = predict_message(
         request.message
     )
 
@@ -53,5 +52,6 @@ def predict(request: MessageRequest):
         "spam_probability": round(
             float(probability),
             4
-        )
+        ),
+        "model_version": str(model_version)
     }
