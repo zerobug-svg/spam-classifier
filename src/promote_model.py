@@ -1,3 +1,5 @@
+import os
+
 import dagshub
 import mlflow
 
@@ -12,6 +14,31 @@ DAGSHUB_OWNER = "adhavprasanna"
 DAGSHUB_REPO = "spam-classifier"
 
 PRODUCTION_ALIAS = "production"
+
+
+# ==========================================
+# GITHUB ACTIONS OUTPUT
+# ==========================================
+
+def set_github_output(status):
+    """
+    Send the promotion result to GitHub Actions.
+    This allows the CI pipeline to decide whether
+    Docker should be published.
+    """
+
+    github_output = os.environ.get("GITHUB_OUTPUT")
+
+    if github_output:
+        with open(
+            github_output,
+            "a",
+            encoding="utf-8"
+        ) as file:
+
+            file.write(
+                f"promotion_status={status}\n"
+            )
 
 
 # ==========================================
@@ -38,7 +65,7 @@ client = mlflow.MlflowClient()
 
 
 # ==========================================
-# FIND ALL REGISTERED MODEL VERSIONS
+# FIND REGISTERED MODEL VERSIONS
 # ==========================================
 
 versions = client.search_model_versions(
@@ -46,7 +73,13 @@ versions = client.search_model_versions(
 )
 
 if not versions:
-    print("No registered model versions found.")
+
+    print(
+        "No registered model versions found."
+    )
+
+    set_github_output("failed")
+
     raise SystemExit(1)
 
 
@@ -96,9 +129,13 @@ latest_f1 = latest_run.data.metrics.get(
 )
 
 if latest_f1 is None:
+
     print(
         "F1 score was not found for the latest model."
     )
+
+    set_github_output("failed")
+
     raise SystemExit(1)
 
 
@@ -158,6 +195,8 @@ if production_version is None:
         "is now production."
     )
 
+    set_github_output("promoted")
+
     raise SystemExit(0)
 
 
@@ -174,10 +213,14 @@ production_f1 = production_run.data.metrics.get(
 )
 
 if production_f1 is None:
+
     print(
         "F1 score was not found for the "
         "current production model."
     )
+
+    set_github_output("failed")
+
     raise SystemExit(1)
 
 
@@ -229,6 +272,8 @@ if (
         "Latest version is already production."
     )
 
+    set_github_output("already_production")
+
     raise SystemExit(0)
 
 
@@ -275,6 +320,8 @@ if latest_f1 > production_f1:
         "is now production."
     )
 
+    set_github_output("promoted")
+
 
 # ==========================================
 # REJECT WORSE MODEL
@@ -304,3 +351,5 @@ else:
         f"Production remains Version "
         f"{production_version.version}."
     )
+
+    set_github_output("rejected")

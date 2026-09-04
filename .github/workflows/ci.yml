@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   test:
@@ -46,10 +43,16 @@ jobs:
           pytest
 
       - name: Evaluate model promotion
+        id: promotion
         run: |
           python -m src.promote_model
 
+      - name: Show promotion result
+        run: |
+          echo "Model promotion status: ${{ steps.promotion.outputs.promotion_status }}"
+
       - name: Log in to GitHub Container Registry
+        if: steps.promotion.outputs.promotion_status == 'promoted'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -57,13 +60,22 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
+        if: steps.promotion.outputs.promotion_status == 'promoted'
         run: |
           docker build -t spam-classifier-api .
 
       - name: Tag Docker image
+        if: steps.promotion.outputs.promotion_status == 'promoted'
         run: |
           docker tag spam-classifier-api ghcr.io/${{ github.repository }}:latest
 
       - name: Push Docker image
+        if: steps.promotion.outputs.promotion_status == 'promoted'
         run: |
           docker push ghcr.io/${{ github.repository }}:latest
+
+      - name: Skip Docker publishing
+        if: steps.promotion.outputs.promotion_status == 'rejected'
+        run: |
+          echo "Model was rejected."
+          echo "Docker image will not be published."
