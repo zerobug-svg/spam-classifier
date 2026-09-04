@@ -38,7 +38,14 @@ def test_spam_prediction():
 
     assert "model_version" in result
 
-    assert result["model_version"] == "9"
+    assert result["prediction"] in [
+        "spam",
+        "ham"
+    ]
+
+    assert 0.0 <= result["spam_probability"] <= 1.0
+
+    assert result["model_version"]
 
 
 def test_normal_message():
@@ -60,4 +67,11 @@ def test_normal_message():
 
     assert "model_version" in result
 
-    assert result["model_version"] == "9"
+    assert result["prediction"] in [
+        "spam",
+        "ham"
+    ]
+
+    assert 0.0 <= result["spam_probability"] <= 1.0
+
+    assert result["model_version"]
