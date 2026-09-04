@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pandas as pd
 import joblib
+import dagshub
 import mlflow
 import mlflow.sklearn
 
@@ -27,16 +28,33 @@ from src.preprocess import clean_text
 
 DATA_PATH = "data/spam.csv"
 MODEL_PATH = "models/spam_model.pkl"
-MODEL_VERSION = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+MODEL_VERSION = datetime.now().strftime(
+    "%Y%m%d_%H%M%S"
+)
 
 REGISTERED_MODEL_NAME = "SpamMessageClassifier"
 
 
 # ==========================================
-# MLflow EXPERIMENT
+# DagsHub MLflow CONNECTION
 # ==========================================
 
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
+dagshub.init(
+    repo_owner="adhavprasanna",
+    repo_name="spam-classifier",
+    mlflow=True
+)
+
+print(
+    "MLflow Tracking URI:",
+    mlflow.get_tracking_uri()
+)
+
+
+# ==========================================
+# MLFLOW EXPERIMENT
+# ==========================================
 
 mlflow.set_experiment(
     "Spam Message Classifier"
@@ -47,9 +65,14 @@ mlflow.set_experiment(
 # LOAD DATASET
 # ==========================================
 
-df = pd.read_csv(DATA_PATH)
+df = pd.read_csv(
+    DATA_PATH
+)
 
-print("Dataset loaded:", df.shape)
+print(
+    "Dataset loaded:",
+    df.shape
+)
 
 
 # ==========================================
@@ -94,216 +117,226 @@ print(
 mlflow.start_run()
 
 
-# ==========================================
-# MACHINE LEARNING PIPELINE
-# ==========================================
+try:
 
-model = Pipeline([
-    (
-        "tfidf",
-        TfidfVectorizer()
-    ),
-    (
-        "classifier",
-        LogisticRegression(
-            class_weight="balanced"
+    # ======================================
+    # MACHINE LEARNING PIPELINE
+    # ======================================
+
+    model = Pipeline([
+        (
+            "tfidf",
+            TfidfVectorizer()
+        ),
+        (
+            "classifier",
+            LogisticRegression(
+                class_weight="balanced"
+            )
         )
+    ])
+
+
+    # ======================================
+    # TRAIN MODEL
+    # ======================================
+
+    print("\nTraining model...")
+
+    model.fit(
+        X_train,
+        y_train
     )
-])
+
+    print(
+        "Training complete!"
+    )
 
 
-# ==========================================
-# TRAIN MODEL
-# ==========================================
+    # ======================================
+    # MODEL PREDICTION
+    # ======================================
 
-print("\nTraining model...")
-
-model.fit(
-    X_train,
-    y_train
-)
-
-print("Training complete!")
+    y_pred = model.predict(
+        X_test
+    )
 
 
-# ==========================================
-# MODEL PREDICTION
-# ==========================================
+    # ======================================
+    # MODEL EVALUATION
+    # ======================================
 
-y_pred = model.predict(
-    X_test
-)
+    accuracy = accuracy_score(
+        y_test,
+        y_pred
+    )
 
-
-# ==========================================
-# MODEL EVALUATION
-# ==========================================
-
-accuracy = accuracy_score(
-    y_test,
-    y_pred
-)
-
-precision = precision_score(
-    y_test,
-    y_pred,
-    pos_label="spam",
-    zero_division=0
-)
-
-recall = recall_score(
-    y_test,
-    y_pred,
-    pos_label="spam",
-    zero_division=0
-)
-
-f1 = f1_score(
-    y_test,
-    y_pred,
-    pos_label="spam",
-    zero_division=0
-)
-
-
-# ==========================================
-# DISPLAY RESULTS
-# ==========================================
-
-print("\n==============================")
-print("MODEL EVALUATION")
-print("==============================")
-
-print(
-    f"Accuracy : {accuracy:.2f}"
-)
-
-print(
-    f"Precision: {precision:.2f}"
-)
-
-print(
-    f"Recall   : {recall:.2f}"
-)
-
-print(
-    f"F1 Score : {f1:.2f}"
-)
-
-
-print("\nClassification Report:")
-
-print(
-    classification_report(
+    precision = precision_score(
         y_test,
         y_pred,
+        pos_label="spam",
         zero_division=0
     )
-)
+
+    recall = recall_score(
+        y_test,
+        y_pred,
+        pos_label="spam",
+        zero_division=0
+    )
+
+    f1 = f1_score(
+        y_test,
+        y_pred,
+        pos_label="spam",
+        zero_division=0
+    )
 
 
-# ==========================================
-# LOG PARAMETERS TO MLFLOW
-# ==========================================
+    # ======================================
+    # DISPLAY RESULTS
+    # ======================================
 
-mlflow.log_param(
-    "model_version",
-    MODEL_VERSION
-)
+    print("\n==============================")
+    print("MODEL EVALUATION")
+    print("==============================")
 
-mlflow.log_param(
-    "model",
-    "LogisticRegression"
-)
+    print(
+        f"Accuracy : {accuracy:.2f}"
+    )
 
-mlflow.log_param(
-    "class_weight",
-    "balanced"
-)
+    print(
+        f"Precision: {precision:.2f}"
+    )
 
-mlflow.log_param(
-    "test_size",
-    0.2
-)
+    print(
+        f"Recall   : {recall:.2f}"
+    )
 
-mlflow.log_param(
-    "random_state",
-    42
-)
-
-mlflow.log_param(
-    "registered_model_name",
-    REGISTERED_MODEL_NAME
-)
+    print(
+        f"F1 Score : {f1:.2f}"
+    )
 
 
-# ==========================================
-# LOG METRICS TO MLFLOW
-# ==========================================
+    print(
+        "\nClassification Report:"
+    )
 
-mlflow.log_metric(
-    "accuracy",
-    accuracy
-)
-
-mlflow.log_metric(
-    "precision",
-    precision
-)
-
-mlflow.log_metric(
-    "recall",
-    recall
-)
-
-mlflow.log_metric(
-    "f1_score",
-    f1
-)
+    print(
+        classification_report(
+            y_test,
+            y_pred,
+            zero_division=0
+        )
+    )
 
 
-# ==========================================
-# LOG MODEL TO MLFLOW MODEL REGISTRY
-# ==========================================
+    # ======================================
+    # LOG PARAMETERS TO MLFLOW
+    # ======================================
 
-mlflow.sklearn.log_model(
-    sk_model=model,
-    name="spam_classifier_model",
-    registered_model_name=REGISTERED_MODEL_NAME
-)
+    mlflow.log_param(
+        "model_version",
+        MODEL_VERSION
+    )
 
+    mlflow.log_param(
+        "model",
+        "LogisticRegression"
+    )
 
-# ==========================================
-# SAVE MODEL LOCALLY
-# ==========================================
+    mlflow.log_param(
+        "class_weight",
+        "balanced"
+    )
 
-os.makedirs(
-    "models",
-    exist_ok=True
-)
+    mlflow.log_param(
+        "test_size",
+        0.2
+    )
 
-joblib.dump(
-    model,
-    MODEL_PATH
-)
+    mlflow.log_param(
+        "random_state",
+        42
+    )
 
-print("\nModel saved successfully!")
-
-print(
-    f"Location: {MODEL_PATH}"
-)
-
-print(
-    f"Model Version: {MODEL_VERSION}"
-)
-
-print(
-    f"Registered Model: {REGISTERED_MODEL_NAME}"
-)
+    mlflow.log_param(
+        "registered_model_name",
+        REGISTERED_MODEL_NAME
+    )
 
 
-# ==========================================
-# END MLFLOW RUN
-# ==========================================
+    # ======================================
+    # LOG METRICS TO MLFLOW
+    # ======================================
 
-mlflow.end_run()
+    mlflow.log_metric(
+        "accuracy",
+        accuracy
+    )
+
+    mlflow.log_metric(
+        "precision",
+        precision
+    )
+
+    mlflow.log_metric(
+        "recall",
+        recall
+    )
+
+    mlflow.log_metric(
+        "f1_score",
+        f1
+    )
+
+
+    # ======================================
+    # LOG MODEL TO MLFLOW MODEL REGISTRY
+    # ======================================
+
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        name="spam_classifier_model",
+        registered_model_name=REGISTERED_MODEL_NAME
+    )
+
+
+    # ======================================
+    # SAVE MODEL LOCALLY
+    # ======================================
+
+    os.makedirs(
+        "models",
+        exist_ok=True
+    )
+
+    joblib.dump(
+        model,
+        MODEL_PATH
+    )
+
+    print(
+        "\nModel saved successfully!"
+    )
+
+    print(
+        f"Location: {MODEL_PATH}"
+    )
+
+    print(
+        f"Model Version: {MODEL_VERSION}"
+    )
+
+    print(
+        f"Registered Model: {REGISTERED_MODEL_NAME}"
+    )
+
+
+finally:
+
+    # ======================================
+    # END MLFLOW RUN
+    # ======================================
+
+    mlflow.end_run()

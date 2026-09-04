@@ -1,3 +1,4 @@
+import dagshub
 import mlflow
 
 
@@ -7,22 +8,37 @@ import mlflow
 
 REGISTERED_MODEL_NAME = "SpamMessageClassifier"
 
-MLFLOW_TRACKING_URI = "sqlite:///mlflow.db"
+DAGSHUB_OWNER = "adhavprasanna"
+DAGSHUB_REPO = "spam-classifier"
+
+PRODUCTION_ALIAS = "production"
 
 
 # ==========================================
-# SET MLFLOW TRACKING SERVER
+# CONNECT TO DAGSHUB
 # ==========================================
 
-mlflow.set_tracking_uri(
-    MLFLOW_TRACKING_URI
+dagshub.init(
+    repo_owner=DAGSHUB_OWNER,
+    repo_name=DAGSHUB_REPO,
+    mlflow=True
 )
+
+print(
+    "MLflow Tracking URI:",
+    mlflow.get_tracking_uri()
+)
+
+
+# ==========================================
+# MLFLOW CLIENT
+# ==========================================
 
 client = mlflow.MlflowClient()
 
 
 # ==========================================
-# GET ALL REGISTERED MODEL VERSIONS
+# FIND ALL REGISTERED MODEL VERSIONS
 # ==========================================
 
 versions = client.search_model_versions(
@@ -34,33 +50,45 @@ if not versions:
     raise SystemExit(1)
 
 
-# ==========================================
-# FIND LATEST MODEL VERSION
-# ==========================================
-
-latest_version = max(
+# Sort versions numerically
+versions = sorted(
     versions,
     key=lambda version: int(version.version)
 )
 
 
 # ==========================================
-# FIND CURRENT PRODUCTION MODEL
+# FIND LATEST MODEL VERSION
 # ==========================================
 
-production_versions = [
-    version
-    for version in versions
-    if version.tags.get("environment") == "production"
-]
+latest_version = versions[-1]
+
+latest_version_number = latest_version.version
+latest_run_id = latest_version.run_id
+
+
+print()
+print("==============================")
+print("LATEST MODEL")
+print("==============================")
+
+print(
+    "Version:",
+    latest_version_number
+)
+
+print(
+    "Run ID:",
+    latest_run_id
+)
 
 
 # ==========================================
-# GET F1 SCORE FOR LATEST MODEL
+# GET LATEST MODEL METRICS
 # ==========================================
 
 latest_run = client.get_run(
-    latest_version.run_id
+    latest_run_id
 )
 
 latest_f1 = latest_run.data.metrics.get(
@@ -69,71 +97,73 @@ latest_f1 = latest_run.data.metrics.get(
 
 if latest_f1 is None:
     print(
-        f"F1 score not found for Version {latest_version.version}."
+        "F1 score was not found for the latest model."
     )
     raise SystemExit(1)
 
 
-# ==========================================
-# DISPLAY LATEST MODEL
-# ==========================================
-
-print("==============================")
-print("AUTOMATIC MODEL EVALUATION")
-print("==============================")
-
 print(
-    f"Latest Model Version : {latest_version.version}"
-)
-
-print(
-    f"Latest Model F1 Score : {latest_f1:.4f}"
+    "F1 Score:",
+    latest_f1
 )
 
 
 # ==========================================
-# FIRST PRODUCTION MODEL
+# CHECK CURRENT PRODUCTION MODEL
 # ==========================================
 
-if not production_versions:
+try:
 
-    print()
-    print("No production model found.")
-
-    print(
-        f"Promoting Version {latest_version.version}"
+    production_version = client.get_model_version_by_alias(
+        REGISTERED_MODEL_NAME,
+        PRODUCTION_ALIAS
     )
 
-    client.set_model_version_tag(
-        name=REGISTERED_MODEL_NAME,
-        version=latest_version.version,
-        key="environment",
-        value="production"
-    )
+except Exception:
 
-    client.set_model_version_tag(
-        name=REGISTERED_MODEL_NAME,
-        version=latest_version.version,
-        key="promotion_status",
-        value="promoted"
-    )
+    production_version = None
+
+
+# ==========================================
+# NO PRODUCTION MODEL
+# ==========================================
+
+if production_version is None:
 
     print()
     print(
-        f"Version {latest_version.version} promoted to production."
+        "No production model found."
+    )
+
+    print(
+        f"Promoting Version {latest_version_number} "
+        "to production..."
+    )
+
+    client.set_registered_model_alias(
+        REGISTERED_MODEL_NAME,
+        PRODUCTION_ALIAS,
+        latest_version_number
+    )
+
+    client.set_model_version_tag(
+        REGISTERED_MODEL_NAME,
+        latest_version_number,
+        "promotion_status",
+        "promoted"
+    )
+
+    print(
+        f"Version {latest_version_number} "
+        "is now production."
     )
 
     raise SystemExit(0)
 
 
 # ==========================================
-# CURRENT PRODUCTION MODEL
+# GET PRODUCTION MODEL METRICS
 # ==========================================
-
-production_version = max(
-    production_versions,
-    key=lambda version: int(version.version)
-)
 
 production_run = client.get_run(
     production_version.run_id
@@ -145,14 +175,30 @@ production_f1 = production_run.data.metrics.get(
 
 if production_f1 is None:
     print(
-        f"F1 score not found for Production Version "
-        f"{production_version.version}."
+        "F1 score was not found for the "
+        "current production model."
     )
     raise SystemExit(1)
 
 
+print()
+print("==============================")
+print("PRODUCTION MODEL")
+print("==============================")
+
+print(
+    "Version:",
+    production_version.version
+)
+
+print(
+    "F1 Score:",
+    production_f1
+)
+
+
 # ==========================================
-# DISPLAY COMPARISON
+# COMPARE MODELS
 # ==========================================
 
 print()
@@ -161,133 +207,100 @@ print("MODEL COMPARISON")
 print("==============================")
 
 print(
-    f"Production Version : {production_version.version}"
+    f"Production F1: {production_f1:.4f}"
 )
 
 print(
-    f"Production F1      : {production_f1:.4f}"
-)
-
-print(
-    f"Candidate Version  : {latest_version.version}"
-)
-
-print(
-    f"Candidate F1       : {latest_f1:.4f}"
+    f"Candidate F1 : {latest_f1:.4f}"
 )
 
 
 # ==========================================
-# DO NOT PROMOTE SAME VERSION
+# SAME VERSION
 # ==========================================
 
 if (
-    latest_version.version
+    latest_version_number
     == production_version.version
 ):
 
     print()
     print(
-        "Candidate is already the production model."
+        "Latest version is already production."
     )
 
     raise SystemExit(0)
 
 
 # ==========================================
-# COMPARE MODELS
+# PROMOTE BETTER MODEL
 # ==========================================
 
 if latest_f1 > production_f1:
 
     print()
     print(
-        "Candidate model is better!"
+        f"Candidate Version {latest_version_number} "
+        "is better."
     )
 
     print(
-        f"Promoting Version {latest_version.version}..."
+        f"Promoting Version {latest_version_number} "
+        "to production..."
     )
 
-    # Remove production status from old model
-    client.set_model_version_tag(
-        name=REGISTERED_MODEL_NAME,
-        version=production_version.version,
-        key="environment",
-        value="previous_production"
+    client.set_registered_model_alias(
+        REGISTERED_MODEL_NAME,
+        PRODUCTION_ALIAS,
+        latest_version_number
     )
 
-    # Promote new model
     client.set_model_version_tag(
-        name=REGISTERED_MODEL_NAME,
-        version=latest_version.version,
-        key="environment",
-        value="production"
+        REGISTERED_MODEL_NAME,
+        latest_version_number,
+        "promotion_status",
+        "promoted"
     )
 
-    # Record promotion status
     client.set_model_version_tag(
-        name=REGISTERED_MODEL_NAME,
-        version=latest_version.version,
-        key="promotion_status",
-        value="promoted"
+        REGISTERED_MODEL_NAME,
+        production_version.version,
+        "promotion_status",
+        "previous_production"
     )
 
     print()
-    print("==============================")
-    print("MODEL PROMOTED")
-    print("==============================")
-
     print(
-        f"Previous Production : Version "
-        f"{production_version.version}"
+        f"Version {latest_version_number} "
+        "is now production."
     )
 
-    print(
-        f"New Production      : Version "
-        f"{latest_version.version}"
-    )
 
-    print(
-        f"Previous F1         : {production_f1:.4f}"
-    )
-
-    print(
-        f"New F1              : {latest_f1:.4f}"
-    )
+# ==========================================
+# REJECT WORSE MODEL
+# ==========================================
 
 else:
 
     print()
     print(
-        "Candidate model is not better."
-    )
-
-    print(
-        "Keeping current production model."
+        f"Candidate Version {latest_version_number} "
+        "is not better than production."
     )
 
     client.set_model_version_tag(
-        name=REGISTERED_MODEL_NAME,
-        version=latest_version.version,
-        key="promotion_status",
-        value="rejected"
-    )
-
-    print()
-    print("==============================")
-    print("MODEL NOT PROMOTED")
-    print("==============================")
-
-    print(
-        f"Production remains : Version "
-        f"{production_version.version}"
+        REGISTERED_MODEL_NAME,
+        latest_version_number,
+        "promotion_status",
+        "rejected"
     )
 
     print(
-        f"Production F1      : {production_f1:.4f}"
+        f"Version {latest_version_number} "
+        "was rejected."
     )
 
     print(
-        f"Candidate F1       : {latest_f1:.4f}"
+        f"Production remains Version "
+        f"{production_version.version}."
     )
